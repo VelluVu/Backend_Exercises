@@ -26,7 +26,7 @@ namespace Backend {
     public class RealTimeCityBikeDataFetcher : ICityBikeDataFetcher 
     {
         private readonly HttpClient _httpClient = new HttpClient();
-        //string http = "http://api.digitransit.fi/routing/v1/routers/hsl/bike_rental";
+        //string URL = "http://api.digitransit.fi/routing/v1/routers/hsl/bike_rental";
 
         public async Task QueryURL() {
             var stringData = await _httpClient.GetStringAsync(URL);
