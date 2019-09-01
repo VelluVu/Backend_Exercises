@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,16 +14,25 @@ namespace Backend
         private readonly HttpClient _httpClient = new HttpClient ( );
         string URL = "http://api.digitransit.fi/routing/v1/routers/hsl/bike_rental";
 
-        public Task<int> GetBikeCountInStation ( string stationName )
+        public async Task<int> GetBikeCountInStation ( string stationName )
         {
-            throw new NotImplementedException ( );
-        }
+            if ( stationName.Any ( char.IsDigit ) )
+            {
+                throw new ArgumentException ( "Given station name contains numbers" );
+            }
 
-        public async Task QueryURL ( )
-        {
             var data = await _httpClient.GetStringAsync ( URL );
-            BikeRentalStationList bikeData = JsonConvert.DeserializeObject<BikeRentalStationList> (data);
+            BikeRentalStationList bikeData = JsonConvert.DeserializeObject<BikeRentalStationList> ( data );
 
+            for ( int i = 0 ; i < bikeData.stations.Count ; i++ )
+            {
+                if ( bikeData.stations [ i ].name == stationName )
+                {
+                    return bikeData.stations [i].bikesAvailable;
+                }
+            }
+
+            return 0;
         }
     }
 }
