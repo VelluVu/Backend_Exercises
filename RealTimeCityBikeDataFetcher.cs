@@ -13,6 +13,8 @@ namespace Backend
     {
         private readonly HttpClient _httpClient = new HttpClient ( );
         string URL = "http://api.digitransit.fi/routing/v1/routers/hsl/bike_rental";
+        int bikeCount = 0;
+        bool found = false;
 
         public async Task<int> GetBikeCountInStation ( string stationName )
         {
@@ -28,11 +30,22 @@ namespace Backend
             {
                 if ( bikeData.stations [ i ].name == stationName )
                 {
-                    return bikeData.stations [i].bikesAvailable;
+                    bikeCount = bikeData.stations [i].bikesAvailable;
+                    found = true;
                 }
             }
 
-            return 0;
+            if( found )
+            {
+                return bikeCount;
+            }
+            else
+            {
+                NotFoundException notFound = new NotFoundException ( );
+            }
+
+            return bikeCount;
+
         }
     }
 }

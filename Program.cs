@@ -9,14 +9,21 @@ namespace Backend
 {
     class Program
     {
-        static void/*async Task*/ Main ( string [ ] args )
+        static void/*async Task*/ Main ( string [ ] args, string mode )
         {
             Console.WriteLine ( args [ 0 ] );
-            RealTimeCityBikeDataFetcher fetcher = new RealTimeCityBikeDataFetcher ( );
-            var task = /*await */ fetcher.GetBikeCountInStation ( "Petikontie" );
-            Console.WriteLine ( task );
-
-
+            if (mode == "offline" || mode == "Offline")
+            {   
+                OfflineCityBikeDataFetcher fetcher = new OfflineCityBikeDataFetcher ( );
+                var task = /*await */ fetcher.GetBikeCountInStation ( "Petikontie" );
+                Console.WriteLine ( task );
+            }
+            else if( mode == "realtime" || mode == "Realtime" )
+            {          
+                RealTimeCityBikeDataFetcher fetcher = new RealTimeCityBikeDataFetcher ( );
+                var task = /*await */ fetcher.GetBikeCountInStation ( "Petikontie" );
+                Console.WriteLine ( task );
+            }
         }
     }
 

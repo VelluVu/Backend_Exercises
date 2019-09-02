@@ -689,7 +689,7 @@
       ]
     },
     "Newtonsoft.Json/12.0.2": {
-      "sha512": "rTK0s2EKlfHsQsH6Yx2smvcTCeyoDNgCW7FEYyV01drPlh2T243PR2DiDXqtC5N4GDm4Ma/lkxfW5a/4793vbA==",
+      "sha512": "mtweBXPWhp1CMQATtBT7ZfMZrbZBTKfjGwz6Y75NwGjx/GztDaUnfw8GK9KZ2T4fDIqKJyDjc9Rxlw5+G2FcVA==",
       "type": "package",
       "path": "newtonsoft.json/12.0.2",
       "files": [
@@ -726,23 +726,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Veli-Matti\\.nuget\\packages\\": {},
+    "C:\\Users\\vellu\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Veli-Matti\\Desktop\\Backend\\Backend.csproj",
+      "projectUniqueName": "C:\\Users\\vellu\\Desktop\\Backend\\Backend.csproj",
       "projectName": "Backend",
-      "projectPath": "C:\\Users\\Veli-Matti\\Desktop\\Backend\\Backend.csproj",
-      "packagesPath": "C:\\Users\\Veli-Matti\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Veli-Matti\\Desktop\\Backend\\obj\\",
+      "projectPath": "C:\\Users\\vellu\\Desktop\\Backend\\Backend.csproj",
+      "packagesPath": "C:\\Users\\vellu\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\vellu\\Desktop\\Backend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Veli-Matti\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\vellu\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
