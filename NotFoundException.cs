@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Backend
 {
     class NotFoundException : Exception
     {
-        
-        string message= "Not Found";
-
-        public NotFoundException (  )
+ 
+        public NotFoundException ( string v )
         {
 
-            Console.WriteLine ( message );
+            Console.WriteLine ( v );
 
         }
     }

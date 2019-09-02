@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Backend
@@ -9,10 +7,10 @@ namespace Backend
     {
         string[] bikeData;
 
-        public Task<int> GetBikeCountInStation ( string stationName )
+        public async Task<int> GetBikeCountInStation ( string stationName )
         {
             int numVal = 0;
-            bikeData = System.IO.File.ReadAllLines ( @"C:\Users\vellu\Desktop\Backend" );
+            bikeData = await System.IO.File.ReadAllLinesAsync ( @"C:\Users\vellu\Desktop\Backend" );
 
             for ( int i = 0 ; i < bikeData.Length ; i++ )
             {
@@ -42,7 +40,7 @@ namespace Backend
 
             }
 
-            return numVal;
+            throw new NotFoundException ( "Given station name was not found" );
 
         }
     }
