@@ -8,26 +8,48 @@ namespace Backend
 {
     class Program
     {
-        static async Task Main ( string [ ] args)
+        static void Main ( string [ ] args )
         {
-            string mode = "";
-            Console.WriteLine ( args [ 0 ] );
+            MainAsync ( args ).GetAwaiter ( ).GetResult ( );
+        }
 
-            Console.WriteLine ( "Type Station Name" );
-            mode = Console.ReadLine ( );
+        static async Task MainAsync ( string [ ] args )
+        {
+
+            string mode;
+            string stationName;
+
+            try
+            {
+                mode = args [ 0 ];
+                stationName = args [ 1 ];
+            }
+            catch ( Exception ex )
+            {
+                Console.WriteLine ( "Not enough arguments! use 'offline|realtime station_name'" );
+                return;
+            }
+
+            ICityBikeDataFetcher fetcher;
 
             if (mode == "offline" || mode == "Offline")
             {   
-                OfflineCityBikeDataFetcher fetcher = new OfflineCityBikeDataFetcher ( );
-                var task = await fetcher.GetBikeCountInStation ( "Petikontie" );
+                fetcher = new OfflineCityBikeDataFetcher ( );
+                var task = await fetcher.GetBikeCountInStation ( stationName );
                 Console.WriteLine ( task );
             }
             else if( mode == "realtime" || mode == "Realtime" )
             {          
-                RealTimeCityBikeDataFetcher fetcher = new RealTimeCityBikeDataFetcher ( );
-                var task = await fetcher.GetBikeCountInStation ( "Petikontie" );
+                fetcher = new RealTimeCityBikeDataFetcher ( );
+                var task = await fetcher.GetBikeCountInStation ( stationName );
                 Console.WriteLine ( task );
             }
+            else
+            {
+                Console.WriteLine ( "Use offline or realtime" );
+                
+                return;
+            }         
         }
     }
 

@@ -6,15 +6,15 @@ namespace Backend
     class OfflineCityBikeDataFetcher : ICityBikeDataFetcher
     {
         string[] bikeData;
+        string path = @"C:\Users\vellu\Desktop\Backend";
 
         public async Task<int> GetBikeCountInStation ( string stationName )
         {
             int numVal = 0;
-            bikeData = await System.IO.File.ReadAllLinesAsync ( @"C:\Users\vellu\Desktop\Backend" );
+            bikeData = await System.IO.File.ReadAllLinesAsync ( path );
 
             for ( int i = 0 ; i < bikeData.Length ; i++ )
             {
-
                 int index = bikeData [ i ].IndexOf ( ":" );
 
                 string subString;
