@@ -8,17 +8,9 @@ namespace ASsignment2
     {
         static void Main ( string [ ] args )
         {
-            int playerAmount = 1000000;
+            PlayerList playerList = new PlayerList ( );
             
-        }
-
-        public List<IPlayer> InstantiatePlayers ( int amount )
-        {
-            for ( int i = 0 ; i < amount ; i++ )
-            {
-
-            }
-        }
+        }  
 
     }
 }
