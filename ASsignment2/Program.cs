@@ -28,9 +28,8 @@ namespace ASsignment2
                 Console.WriteLine ( array2 [ i ] );
             }
 
-
             ProcessEachItem ( (Player)players [ 0 ], PrintMessage );
-            ProcessEachItem ( (Player)players [ 0 ], x => Console.WriteLine ( x.Id + " " + x.Level ) );
+            ProcessEachItem ( (Player)players [ 0 ], item => Console.WriteLine ( item.Id + " " + item.Level ) );
         }
 
         public static void PrintMessage ( Item item )
@@ -40,17 +39,18 @@ namespace ASsignment2
 
         public static void ProcessEachItem ( Player player, Action<Item> process )
         {
-            if ( player.Items == null )
-            {
+            //if ( player.Items == null )
+            //{
 
-            }
-            else
-            {
-                foreach ( var item in player.Items )
-                {
-                    process ( item );
-                }
-            }
+            //}
+            //else
+            //{
+            //    foreach ( var item in player.Items )
+            //    {
+            //        process ( item );
+            //    }
+            //}
+            player.Items.ForEach ( item => process ( item ) );
         }
     }
 }

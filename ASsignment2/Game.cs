@@ -18,11 +18,11 @@ namespace ASsignment2
         {
             // ... write code that returns 10 players with highest scores
 
-            T[] players = ( from p in _players
-                            orderby p.Score descending
-                            select p ).Take ( 10 ).ToArray();
+            //T[] players = ( from p in _players
+            //                orderby p.Score descending
+            //                select p ).Take ( 10 ).ToArray();
 
-            return players;
+            return _players.OrderByDescending ( x => x.Score ).Take ( 10 ).ToArray ( );
         }
     }
 }

@@ -10,9 +10,7 @@ namespace ASsignment2
 
         public static Item GetHighestLevelItem ( this Player player )
         {
-            Item item = player.Items [ player.Items.Max ( x => x.Level ) ];
-
-            return item;
+            return player.Items [ player.Items.Max ( x => x.Level ) ];
         }
 
         public static void InstantiatePlayers ( this List<IPlayer> players, int playerAmount )
@@ -22,17 +20,15 @@ namespace ASsignment2
                 Player player = new Player ( );
                 player.Id = new Guid ( );
                 players.Add ( player );
-              
+
             }
         }
 
-        public static void CheckGuidDublicates ( )
+        public static void CheckGuidDublicates ( this List<IPlayer> players )
         {
-
-
+            
         }
-     
+
     }
 
-}
 }
