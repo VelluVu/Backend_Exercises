@@ -7,28 +7,65 @@ public class FileRepository : IRepository
 {
 
     string path = @"C:\Users\Veli-Matti\Desktop\Backend\Assignment3\game-dev.txt";
+    int playerCount = 0;
 
-    Task<Player> IRepository.Get ( Guid id )
+    async Task<Player> IRepository.Get ( Guid id )
     {
-        throw new NotImplementedException ( );
-    }
 
-    Task<Player [ ]> IRepository.GetAll ( )
+        var text = await File.ReadAllLinesAsync ( path );
+
+        Player _player = new Player ( );
+
+        for ( int i = 0 ; i < text.Length ; i++ )
+        {
+            if ( text [ i ] == id.ToString ( ) )
+            {
+                _player.Id = id;
+                _player.Name = text [ i + 1 ];
+                _player.Level = int.Parse ( text [ i + 2 ] );
+                _player.Score = int.Parse ( text [ i + 3 ] );
+                _player.IsBanned = bool.Parse ( text [ i + 4 ] );
+
+                return _player;
+            }
+        }
+    
+        throw new ArgumentException ( "Id cannot be found from the repository" );
+}
+
+    async Task<Player [ ]> IRepository.GetAll ( )
     {
-        throw new NotImplementedException ( );
+
+        Player [ ] players = new Player [ playerCount ];
+
+        var text = await File.ReadAllLinesAsync ( path );
+
+        for ( int i = 0 ; i < text.Length ; i++ )
+        {
+            if(text[i])
+        }
+
+
+
+
+
+        return players;
+
     }
 
     async Task<Player> IRepository.Create ( Player player )
     {
         string text =
-            player.Id + "\n" +
-            player.Name + "\n" + 
-            player.Level + "\n" + 
-            player.Score + "\n" + 
-            player.IsBanned + "\n\n";
-        
+            "id : " + player.Id + "\n" +
+            "name : " + player.Name + "\n" + 
+            "level : " +player.Level + "\n" + 
+            "score : " + player.Score + "\n" + 
+            "isbanned : " + player.IsBanned + "\n\n";
 
-        await File.WriteAllTextAsync ( path, text );
+        //Writes new player to the txt file
+        await File.AppendAllTextAsync ( path, text );
+
+        playerCount++;
 
         return player;
     }
@@ -47,7 +84,7 @@ public class FileRepository : IRepository
                 _player.Id = id;
                 _player.Name = text [ i + 1 ];
                 _player.Level = int.Parse ( text [ i + 2 ]);
-                _player.Score = int.Parse(text [ i + 3 ]);       
+                text [ i + 3 ] = player.Score.ToString ( );
                 _player.IsBanned = bool.Parse ( text [ i + 4 ] );
 
                 return _player;
@@ -62,5 +99,7 @@ public class FileRepository : IRepository
     Task<Player> IRepository.Delete ( Guid id )
     {
         throw new NotImplementedException ( );
+
+        playerCount--;
     }
 }
