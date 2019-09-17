@@ -1,5 +1,10 @@
 
-public class NewPlayer
+
+namespace Assignment3.Players
 {
-    public string Name { get; set; }
+
+    public class NewPlayer
+    {
+        public string Name { get; set; }
+    }
 }

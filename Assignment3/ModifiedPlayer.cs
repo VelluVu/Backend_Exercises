@@ -1,5 +1,8 @@
-
-public class ModifiedPlayer
+namespace Assignment3.Players
 {
-    public int Score { get; set; }
+
+    public class ModifiedPlayer
+    {
+        public int Score { get; set; }
+    }
 }
