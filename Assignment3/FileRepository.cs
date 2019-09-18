@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Linq;
 using Assignment3.Players;
+using System.Collections.Generic;
 
 namespace Assignment3.Repositories
 {
@@ -10,37 +11,30 @@ namespace Assignment3.Repositories
     public class FileRepository : IRepository
     {
 
-        string path = @"C:\Users\Veli-Matti\Desktop\Backend\Assignment3\game-dev.txt";
-        int playerCount = 0;
+        string path = AppDomain.CurrentDomain.BaseDirectory + "/game-dev.txt";
 
         public async Task<Player> Get ( Guid id )
         {
 
-            var text = await File.ReadAllLinesAsync ( path );
+            string [ ] textArray = await File.ReadAllLinesAsync ( path );
+            List<string> textList = textArray.ToList ( );
 
-            Player _player = new Player ( );
-
-            for ( int i = 0 ; i < text.Length ; i++ )
+            foreach ( var line in textList )
             {
+                string [ ] entries = line.Split ( ',' );
 
-                int index = text [ i ].IndexOf ( ":" );
-                string subString;
-
-                if ( index != -1 )
+                if ( entries [ 0 ] == id.ToString ( ) )
                 {
-                    subString = text [ i ].Substring ( index + 1, text[i].Length );
+                    Player p = new Player ( );
+                    p.Id = new Guid ( entries [ 0 ] );
+                    p.Name = entries [ 1 ];
+                    p.Level = int.Parse ( entries [ 2 ] );
+                    p.Score = int.Parse ( entries [ 3 ] );
+                    p.IsBanned = bool.Parse ( entries [ 4 ] );
 
-                    if ( subString == id.ToString ( ) )
-                    {
-                        _player.Id = id;
-                        _player.Name = text [ i ].Substring ( 0, index + 1 );
-                        _player.Level = int.Parse ( text [ i ].Substring ( 0, index + 2 ) );
-                        _player.Score = int.Parse ( text [ i ].Substring ( 0, index + 3 ) );
-                        _player.IsBanned = bool.Parse ( text [ i ].Substring ( 0, index + 4 ) );
-
-                        return _player;
-                    }
+                    return p;
                 }
+
             }
 
             throw new ArgumentException ( "Id cannot be found from the repository" );
@@ -49,68 +43,101 @@ namespace Assignment3.Repositories
         public async Task<Player [ ]> GetAll ( )
         {
 
-            Player [ ] players = new Player [ playerCount ];
-            int counter = 0;
+            List<Player> playerList = new List<Player> ( );
 
-            var text = await File.ReadAllLinesAsync ( path );
+            string [ ] textArray = await File.ReadAllLinesAsync ( path );
+            List<string> textList = textArray.ToList ( );
 
-            for ( int i = 0 ; i < text.Length ; i++ )
+            foreach ( var line in textList )
             {
-                int index = text [ i ].IndexOf ( ":" );
-                string subString;
+                string [ ] entries = line.Split ( ',' );
 
-                if ( index != -1 )
-                {
-                    subString = text [ i ].Substring ( 0, 2 );
+                Player p = await Get ( new Guid ( entries [ 0 ] ) );
 
-                    if ( subString == "id" )
-                    {
-                        string guid = text [ i ].Substring ( index + 1, text [ i ].Length );
-                        Guid g = new Guid ( guid );
-                        players [ counter ] = await Get ( g );
-                        counter++;
-                    }
-                }
+                playerList.Add ( p );
             }
 
-            return players;
+
+            Player [ ] playerArray = playerList.ToArray ( );
+
+            return playerArray;
         }
 
         public async Task<Player> Create ( Player player )
         {
-            string text =
-                "id : " + player.Id + "\n" +
-                "name : " + player.Name + "\n" +
-                "level : " + player.Level + "\n" +
-                "score : " + player.Score + "\n" +
-                "isbanned : " + player.IsBanned + "\n\n";
+
+            string textLine =
+                player.Id + "," +
+                player.Name + "," +
+                player.Level + "," +
+                player.Score + "," +
+                player.IsBanned + ",";
 
             //Writes new player to the txt file
-            await File.AppendAllTextAsync ( path, text );
+            await File.AppendAllTextAsync ( path, textLine );
 
-            playerCount++;
+            using ( StreamWriter writer = new StreamWriter ( path, true ) ) //// true to append data to the file
+            {
+                writer.WriteLine ( textLine );
+            }
 
             return player;
+
         }
 
+        //Modifies player and rewrites the text file
         public async Task<Player> Modify ( Guid id, ModifiedPlayer player )
         {
-            var text = await File.ReadAllLinesAsync ( path );
 
-            Player _player = new Player ( );
-            _player = await Get ( id );
-            
-            return _player;
+            Player [ ] players = await GetAll ( );
+            List<Player> playerList = players.ToList ( );
+
+            foreach ( var p in playerList )
+            {
+                if ( id == p.Id )
+                {
+                    p.Score = player.Score;
+
+                }
+            }
+
+            string [ ] textLines = new string [ playerList.Count ];
+
+            for ( int i = 0 ; i < textLines.Length ; i++ )
+            {
+                textLines [ i ] = playerList [ i ].Id.ToString ( ) + "," + playerList [ i ].Name + "," + playerList [ i ].Level.ToString ( ) + "," + playerList [ i ].Score.ToString ( ) + "," + playerList [ i ].IsBanned.ToString ( );
+            }
+
+            await File.WriteAllLinesAsync ( path, textLines );
+
+            return await Get ( id );
         }
 
+        //Removes player from textfile and rewrites it
         public async Task<Player> Delete ( Guid id )
         {
-            Player player = new Player ( );
-            player = await Get ( id );
+            Player [ ] players = await GetAll ( );
+            List<Player> playerList = players.ToList ( );
 
-            playerCount--;
+            foreach ( var p in playerList )
+            {
+                if ( id == p.Id )
+                {
+                    playerList.Remove ( p );
 
-            return player;
+                }
+            }
+
+            string [ ] textLines = new string [ playerList.Count ];
+
+            for ( int i = 0 ; i < textLines.Length ; i++ )
+            {
+                textLines [ i ] = playerList [ i ].Id.ToString ( ) + "," + playerList [ i ].Name + "," + playerList [ i ].Level.ToString ( ) + "," + playerList [ i ].Score.ToString ( ) + "," + playerList [ i ].IsBanned.ToString ( );
+            }
+
+            await File.WriteAllLinesAsync ( path, textLines );
+
+            return await Get ( id );
         }
     }
 }
