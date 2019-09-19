@@ -28,29 +28,39 @@ namespace Assignment3.Controllers
             repo = repository;
         }
 
-        [Route ( "players/get/{id:guid}" )]
+        [HttpGet]
+        [Route ( "{id:guid}" )]
         public Task<Player> Get ( Guid id )
         {
             return repo.Get ( id );
         }
-        [Route ( "players/getall" )]
+
+        [HttpGet]
+        [Route ( "" )]
         public Task<Player [ ]> GetAll ( )
         {
             return repo.GetAll ( );
         }
-        [Route("players/create/{player:newplayer}")]
+
+        [HttpPut]
+        [Route("{player:newplayer}")]
         public Task<Player> Create ( NewPlayer player )
         {
             Player newPlayer = new Player ( );
+            newPlayer.Id = new Guid ( );
             newPlayer.Name = player.Name;
             return repo.Create ( newPlayer );
         }
-        [Route ( "players/modify/{id:guid}{player:modifiedplayer}" )]
+
+        [HttpPut]
+        [Route ( "{id:guid}{player:modifiedplayer}" )]
         public Task<Player> Modify ( Guid id, ModifiedPlayer player )
         {
             return repo.Modify ( id, player );
         }
-        [Route ( "players/delete/{id:guid}" )]
+
+        [HttpDelete]
+        [Route ( "{id:guid}" )]
         public Task<Player> Delete ( Guid id )
         {
             return repo.Delete ( id );
