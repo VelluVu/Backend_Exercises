@@ -1,4 +1,5 @@
 ﻿using GameWebApi.Players;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,11 +10,11 @@ namespace GameWebApi.Repositories
 {
     public class FileRepository : IRepository
     {
-        string path = AppDomain.CurrentDomain.BaseDirectory + @"Repositories\game-dev.txt";
+        static string path = Path.Combine ( AppDomain.CurrentDomain.BaseDirectory, "game-dev.txt" );
 
         public async Task<Player> Get ( Guid id )
         {
-
+            
             string [ ] textArray = await File.ReadAllLinesAsync ( path );
             List<string> textList = textArray.ToList ( );
 
@@ -72,7 +73,7 @@ namespace GameWebApi.Repositories
                 player.IsBanned + ",";
 
             //Writes new player to the txt file
-            await File.AppendAllTextAsync ( path, textLine );
+            //await File.AppendAllTextAsync ( path, textLine );
 
             using ( StreamWriter writer = new StreamWriter ( path, true ) ) //// true to append data to the file
             {
@@ -116,14 +117,24 @@ namespace GameWebApi.Repositories
         {
             Player [ ] players = await GetAll ( );
             List<Player> playerList = players.ToList ( );
-
-            foreach ( var p in playerList )
+            bool removeSuccess = false;
+            if(playerList.Count == 0)
             {
-                if ( id == p.Id )
-                {
-                    playerList.Remove ( p );
+                throw new ArgumentException ( "List is empty" );
+            }
 
+            for ( int p = 0 ; p < playerList.Count ; p++ )
+            {
+                if ( id == playerList[p].Id )
+                {
+                    playerList.Remove ( playerList [ p ] );
+                    removeSuccess = true;
                 }
+            }
+
+            if ( !removeSuccess )
+            {
+                throw new ArgumentException ( "Id cannot be found from the repository" );
             }
 
             string [ ] textLines = new string [ playerList.Count ];

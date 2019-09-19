@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GameWebApi.Controllers
 {
-    [Route ( "api/players/" )]
+    [Route ( "api/[controller]" )]
     [ApiController]
     public class PlayersController : Controller
     {
@@ -29,10 +29,10 @@ namespace GameWebApi.Controllers
         }
 
         [HttpGet]
-        [Route ( "{id:guid}" )]
-        public Task<Player> Get ( Guid id )
+        [Route ( "{id}" )]
+        public Task<Player> Get ( string id )
         {
-            return repo.Get ( id );
+            return repo.Get ( new Guid ( id ) );
         }
 
         [HttpGet]
@@ -43,27 +43,28 @@ namespace GameWebApi.Controllers
         }
 
         [HttpPut]
-        [Route ( "{player:newplayer}" )]
-        public Task<Player> Create ( NewPlayer player )
+        [Route ( "{newPlayer}" )]
+        public async Task<Player> Create ( string newPlayer )
         {
-            Player newPlayer = new Player ( );
-            newPlayer.Id = new Guid ( );
-            newPlayer.Name = player.Name;
-            return repo.Create ( newPlayer );
+            Player player = new Player ( );
+            player.Id = Guid.NewGuid ( );
+            player.Name = newPlayer.ToString();
+            await repo.Create ( player );
+            return player;
         }
 
         [HttpPut]
-        [Route ( "{id:guid}{player:modifiedplayer}" )]
-        public Task<Player> Modify ( Guid id, ModifiedPlayer player )
+        [Route ( "{id}/{score}" )]
+        public async Task<Player> Modify ( string id, int score )
         {
-            return repo.Modify ( id, player );
+            return await repo.Modify ( new Guid ( id ), new ModifiedPlayer { Score = score } );
         }
 
         [HttpDelete]
-        [Route ( "{id:guid}" )]
-        public Task<Player> Delete ( Guid id )
+        [Route ( "{id}" )]
+        public Task<Player> Delete ( string id )
         {
-            return repo.Delete ( id );
+            return repo.Delete ( new Guid ( id ) );
         }
     }
 }
