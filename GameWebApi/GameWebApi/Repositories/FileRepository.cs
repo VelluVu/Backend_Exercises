@@ -1,10 +1,12 @@
-﻿using GameWebApi.Players;
+﻿using GameWebApi.Items;
+using GameWebApi.Players;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace GameWebApi.Repositories
 {
@@ -14,7 +16,7 @@ namespace GameWebApi.Repositories
 
         public async Task<Player> Get ( Guid id )
         {
-            
+
             string [ ] textArray = await File.ReadAllLinesAsync ( path );
             List<string> textList = textArray.ToList ( );
 
@@ -49,7 +51,7 @@ namespace GameWebApi.Repositories
 
             foreach ( var line in textList )
             {
-                string [ ] entries = line.Split ( ',' );
+                string [ ] entries = line.Split ( ':' );
 
                 Player p = await Get ( new Guid ( entries [ 0 ] ) );
 
@@ -64,22 +66,16 @@ namespace GameWebApi.Repositories
 
         public async Task<Player> Create ( Player player )
         {
+            
+            //Make json formatted string from player class
+                string text = JsonConvert.SerializeObject ( player );
+                //Writes new player to the txt file
+                //await File.AppendAllTextAsync ( path, textLine );
 
-            string textLine =
-                player.Id + "," +
-                player.Name + "," +
-                player.Level + "," +
-                player.Score + "," +
-                player.IsBanned + ",";
+            //add player to txt file in web api
+                await File.AppendAllTextAsync ( path, text );
 
-            //Writes new player to the txt file
-            //await File.AppendAllTextAsync ( path, textLine );
-
-            using ( StreamWriter writer = new StreamWriter ( path, true ) ) //// true to append data to the file
-            {
-                writer.WriteLine ( textLine );
-            }
-
+            //return player
             return player;
 
         }
@@ -118,14 +114,14 @@ namespace GameWebApi.Repositories
             Player [ ] players = await GetAll ( );
             List<Player> playerList = players.ToList ( );
             bool removeSuccess = false;
-            if(playerList.Count == 0)
+            if ( playerList.Count == 0 )
             {
                 throw new ArgumentException ( "List is empty" );
             }
 
             for ( int p = 0 ; p < playerList.Count ; p++ )
             {
-                if ( id == playerList[p].Id )
+                if ( id == playerList [ p ].Id )
                 {
                     playerList.Remove ( playerList [ p ] );
                     removeSuccess = true;
@@ -141,12 +137,46 @@ namespace GameWebApi.Repositories
 
             for ( int i = 0 ; i < textLines.Length ; i++ )
             {
-                textLines [ i ] = playerList [ i ].Id.ToString ( ) + "," + playerList [ i ].Name + "," + playerList [ i ].Level.ToString ( ) + "," + playerList [ i ].Score.ToString ( ) + "," + playerList [ i ].IsBanned.ToString ( );
+                textLines [ i ] = 
+                    playerList [ i ].Id.ToString ( ) + "," + 
+                    playerList [ i ].Name + "," + 
+                    playerList [ i ].Level.ToString ( ) + "," + 
+                    playerList [ i ].Score.ToString ( ) + "," + 
+                    playerList [ i ].IsBanned.ToString ( ) + ",";                  
             }
 
             await File.WriteAllLinesAsync ( path, textLines );
 
             return await Get ( id );
+        }
+
+        public Task<Item> GetItem ( Player player, Guid id )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task<Item [ ]> GetAllItems ( Player player )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public async Task<Item> CreateItem ( Player player, Item item )
+        {
+  
+            player.itemList.Add ( item );
+
+            return item;
+
+        }
+
+        public Task<Item> UseItem ( Player player, Guid id, ModifiedItem item )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task<Item> DeleteItem ( Player player, Guid id )
+        {
+            throw new NotImplementedException ( );
         }
     }
 }
