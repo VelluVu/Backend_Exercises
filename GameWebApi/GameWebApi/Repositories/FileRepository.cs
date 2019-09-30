@@ -18,27 +18,38 @@ namespace GameWebApi.Repositories
         {
 
             string [ ] textArray = await File.ReadAllLinesAsync ( path );
-            List<string> textList = textArray.ToList ( );
 
-            foreach ( var line in textList )
+            for ( int i = 0 ; i < textArray.Length ; i++ )
             {
-                string [ ] entries = line.Split ( ',' );
-
-                if ( entries [ 0 ] == id.ToString ( ) )
+                int index = textArray [ i ].IndexOf ( ":" );
+                string subString;
+                if ( index != -1 )
                 {
-                    Player p = new Player ( );
-                    p.Id = new Guid ( entries [ 0 ] );
-                    p.Name = entries [ 1 ];
-                    p.Level = int.Parse ( entries [ 2 ] );
-                    p.Score = int.Parse ( entries [ 3 ] );
-                    p.IsBanned = bool.Parse ( entries [ 4 ] );
+                    subString = textArray [ i ].Substring ( index, textArray [ i ].Length );
 
-                    return p;
+                    if ( subString == id.ToString ( ) )
+                    {
+                        try
+                        {
+                            Player p = new Player ( );
+                            p.Id = id;
+                            p.Name = textArray [ i + 1 ].Substring ( textArray [ i ].IndexOf ( ":" ), textArray [ i + 1 ].Length );
+                            p.Level = int.Parse ( textArray [ i + 2 ].Substring ( textArray [ i ].IndexOf ( ":" ), textArray [ i + 2 ].Length ) );
+                            p.Score = int.Parse ( textArray [ i + 3 ].Substring ( textArray [ i ].IndexOf ( ":" ), textArray [ i + 3 ].Length ) );
+                            p.IsBanned = bool.Parse ( textArray [ i + 4 ].Substring ( textArray [ i ].IndexOf ( ":" ), textArray [ i + 4 ].Length ) );
+
+                            return p;
+                        }
+                        catch ( FormatException e )
+                        {
+                            Console.WriteLine ( e.Message );
+                        }
+                    }
                 }
-
             }
 
             throw new ArgumentException ( "Id cannot be found from the repository" );
+
         }
 
         public async Task<Player [ ]> GetAll ( )
@@ -47,33 +58,43 @@ namespace GameWebApi.Repositories
             List<Player> playerList = new List<Player> ( );
 
             string [ ] textArray = await File.ReadAllLinesAsync ( path );
-            List<string> textList = textArray.ToList ( );
 
-            foreach ( var line in textList )
+            for ( int i = 0 ; i < textArray.Length ; i++ )
             {
-                string [ ] entries = line.Split ( ':' );
+                int index = textArray [ i ].IndexOf ( ":" );
+                string subString;
+                if ( index != -1 )
+                {
+                    subString = textArray [ i ].Substring ( 0, index -1 );
+                    Console.WriteLine ( subString ); 
+                    if ( subString == "id" )
+                    {
+                        Player p = await Get ( new Guid ( textArray [ i ].Substring ( index, textArray [ i ].Length ) ) );
 
-                Player p = await Get ( new Guid ( entries [ 0 ] ) );
+                        playerList.Add ( p );
 
-                playerList.Add ( p );
+                    }
+                }
             }
 
+            if(playerList.Count == 0)
+            {
+                throw new ArgumentException ( "List is empty" );
+            }
 
-            Player [ ] playerArray = playerList.ToArray ( );
-
-            return playerArray;
+            return playerList.ToArray ( );
         }
 
         public async Task<Player> Create ( Player player )
         {
-            
+
             //Make json formatted string from player class
-                string text = JsonConvert.SerializeObject ( player );
-                //Writes new player to the txt file
-                //await File.AppendAllTextAsync ( path, textLine );
+            string text = JsonConvert.SerializeObject ( player );
+            //Writes new player to the txt file
+            //await File.AppendAllTextAsync ( path, textLine );
 
             //add player to txt file in web api
-                await File.AppendAllTextAsync ( path, text );
+            await File.AppendAllTextAsync ( path, text );
 
             //return player
             return player;
@@ -96,14 +117,8 @@ namespace GameWebApi.Repositories
                 }
             }
 
-            string [ ] textLines = new string [ playerList.Count ];
-
-            for ( int i = 0 ; i < textLines.Length ; i++ )
-            {
-                textLines [ i ] = playerList [ i ].Id.ToString ( ) + "," + playerList [ i ].Name + "," + playerList [ i ].Level.ToString ( ) + "," + playerList [ i ].Score.ToString ( ) + "," + playerList [ i ].IsBanned.ToString ( );
-            }
-
-            await File.WriteAllLinesAsync ( path, textLines );
+            string text = JsonConvert.SerializeObject ( playerList );
+            File.WriteAllText ( path, text );
 
             return await Get ( id );
         }
@@ -113,7 +128,9 @@ namespace GameWebApi.Repositories
         {
             Player [ ] players = await GetAll ( );
             List<Player> playerList = players.ToList ( );
+
             bool removeSuccess = false;
+
             if ( playerList.Count == 0 )
             {
                 throw new ArgumentException ( "List is empty" );
@@ -133,19 +150,9 @@ namespace GameWebApi.Repositories
                 throw new ArgumentException ( "Id cannot be found from the repository" );
             }
 
-            string [ ] textLines = new string [ playerList.Count ];
 
-            for ( int i = 0 ; i < textLines.Length ; i++ )
-            {
-                textLines [ i ] = 
-                    playerList [ i ].Id.ToString ( ) + "," + 
-                    playerList [ i ].Name + "," + 
-                    playerList [ i ].Level.ToString ( ) + "," + 
-                    playerList [ i ].Score.ToString ( ) + "," + 
-                    playerList [ i ].IsBanned.ToString ( ) + ",";                  
-            }
-
-            await File.WriteAllLinesAsync ( path, textLines );
+            string text = JsonConvert.SerializeObject ( playerList );
+            File.WriteAllText ( path, text );
 
             return await Get ( id );
         }
@@ -162,7 +169,7 @@ namespace GameWebApi.Repositories
 
         public async Task<Item> CreateItem ( Player player, Item item )
         {
-  
+
             player.itemList.Add ( item );
 
             return item;

@@ -49,6 +49,7 @@ namespace GameWebApi.Controllers
             Player player = new Player ( );
             player.Id = Guid.NewGuid ( );
             player.Name = newPlayer.ToString();
+            player.CreationTime = DateTime.Now;
             await repo.Create ( player );
             return player;
         }
