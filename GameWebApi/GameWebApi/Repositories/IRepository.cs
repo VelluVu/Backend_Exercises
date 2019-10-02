@@ -11,14 +11,14 @@ namespace GameWebApi.Repositories
     {
         Task<Player> Get ( Guid id );
         Task<Player [ ]> GetAll ( );
-        Task<Player> Create ( Player player );
+        Task<Player> Create ( NewPlayer player );
         Task<Player> Modify ( Guid id, ModifiedPlayer player );
         Task<Player> Delete ( Guid id );
 
-        Task<Item> GetItem ( Player player, Guid id );
-        Task<Item [ ]> GetAllItems ( Player player );
-        Task<Item> CreateItem (Player player, Item item );
-        Task<Item> UseItem ( Player player, Guid id, ModifiedItem item );
-        Task<Item> DeleteItem ( Player player, Guid id );
+        Task<Item> GetItem ( Guid playerI, Guid id );
+        Task<Item [ ]> GetAllItems ( Guid player );
+        Task<Item> CreateItem ( Guid player, NewItem item );
+        Task<Item> ModifyItem ( Guid player, Guid id, ModifiedItem item );
+        Task<Item> DeleteItem ( Guid player, Guid id );
     }
 }

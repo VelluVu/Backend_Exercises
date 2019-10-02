@@ -26,6 +26,7 @@ namespace GameWebApi
             if ( env.IsDevelopment ( ) )
             {
                 app.UseDeveloperExceptionPage ( );
+                
             }
 
             app.UseMvc ( );

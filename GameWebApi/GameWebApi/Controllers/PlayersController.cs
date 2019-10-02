@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameWebApi.ErrorHandling;
 using GameWebApi.Players;
 using GameWebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -42,16 +43,14 @@ namespace GameWebApi.Controllers
             return repo.GetAll ( );
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route ( "{newPlayer}" )]
+        [ShowMessageException ( typeof ( NotFoundException ) )]
         public async Task<Player> Create ( string newPlayer )
         {
-            Player player = new Player ( );
-            player.Id = Guid.NewGuid ( );
-            player.Name = newPlayer.ToString();
-            player.CreationTime = DateTime.Now;
-            await repo.Create ( player );
-            return player;
+            NewPlayer nPlayer = new NewPlayer ( );
+            nPlayer.Name = newPlayer;
+            return await repo.Create ( nPlayer );
         }
 
         [HttpPut]

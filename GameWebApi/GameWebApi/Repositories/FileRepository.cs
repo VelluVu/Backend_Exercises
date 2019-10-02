@@ -12,7 +12,16 @@ namespace GameWebApi.Repositories
 {
     public class FileRepository : IRepository
     {
-        static string path = Path.Combine ( AppDomain.CurrentDomain.BaseDirectory, "game-dev.txt" );
+        static string currentFileName = "game-dev.txt";
+        static string path = Path.Combine ( AppDomain.CurrentDomain.BaseDirectory, currentFileName );
+
+        public void ChangePath(string textFileName)
+        {
+            File.Move ( currentFileName, textFileName );
+            currentFileName = textFileName;
+            path = Path.Combine ( AppDomain.CurrentDomain.BaseDirectory, textFileName );
+            
+        }
 
         public async Task<Player> Get ( Guid id )
         {
@@ -85,9 +94,10 @@ namespace GameWebApi.Repositories
             return playerList.ToArray ( );
         }
 
-        public async Task<Player> Create ( Player player )
+        public async Task<Player> Create ( NewPlayer newPlayer )
         {
-
+            Player player = new Player ( );
+            player.Name = newPlayer.Name;
             //Make json formatted string from player class
             string text = JsonConvert.SerializeObject ( player );
             //Writes new player to the txt file
@@ -157,33 +167,55 @@ namespace GameWebApi.Repositories
             return await Get ( id );
         }
 
-        public Task<Item> GetItem ( Player player, Guid id )
+        public async Task<Item> GetItem ( Guid playerId , Guid itemId )
         {
-            throw new NotImplementedException ( );
+            Player player = await Get ( playerId );
+
+            return player.itemList.First ( x => x.Id == itemId );
         }
 
-        public Task<Item [ ]> GetAllItems ( Player player )
+        public async Task<Item [ ]> GetAllItems ( Guid playerId )
         {
-            throw new NotImplementedException ( );
+
+            Player player = await Get ( playerId );
+            
+            return player.itemList.ToArray ( );
+
         }
 
-        public async Task<Item> CreateItem ( Player player, Item item )
+        public async Task<Item> CreateItem ( Guid playerId, NewItem newItem )
         {
 
+            Player player = await Get ( playerId );
+            Item item = new Item ( );
+            item.Name = newItem.Name;
             player.itemList.Add ( item );
 
             return item;
 
         }
 
-        public Task<Item> UseItem ( Player player, Guid id, ModifiedItem item )
+        public async Task<Item> ModifyItem ( Guid playerId, Guid itemId, ModifiedItem item )
         {
-            throw new NotImplementedException ( );
+            Player player = await Get ( playerId );
+
+            var query = from x in player.itemList
+                        where x.Id == itemId         
+                        select x.Level = item.Level;
+
+            return (Item)query;
+                    
         }
 
-        public Task<Item> DeleteItem ( Player player, Guid id )
+        public async Task<Item> DeleteItem ( Guid playerId, Guid itemId )
         {
-            throw new NotImplementedException ( );
+            Player player = await Get ( playerId );
+
+            Item item = player.itemList.First ( x => x.Id == itemId );
+
+            player.itemList.Remove ( player.itemList.First ( x => x.Id == itemId ) );
+
+            return item;
         }
     }
 }
