@@ -1,0 +1,8 @@
+Assignment 1   	= 	done
+assignment 2   	= 	done
+assignment 3   	= 	is not working, continued in GameWebApi...
+assignment 3-6 	= 	newest versions are in GameWebApi done
+
+Project = ZVSE-Scoreboard
+UML = ZVSE_Leaderboard.png
+Document = Zombies VS Elves imaginary Leaderboard ....edited with word
