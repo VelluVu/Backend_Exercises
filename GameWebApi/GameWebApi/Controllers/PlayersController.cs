@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace GameWebApi.Controllers
 {
-    [Route ( "api/[controller]" )]
+    [Route ( "api/players" )]
     [ApiController]
     public class PlayersController : Controller
     {
@@ -32,7 +32,7 @@ namespace GameWebApi.Controllers
         }
 
         [HttpGet]
-        [Route ( "{id}" )]
+        [Route ( "{id:alpha}" )]
         public Task<Player> Get ( string id )
         {
             return repo.Get ( new Guid ( id ) );
@@ -57,14 +57,14 @@ namespace GameWebApi.Controllers
         }
 
         [HttpPut]
-        [Route ( "{id}/{score}" )]
+        [Route ( "{id:alpha}/{score:int}" )]
         public async Task<Player> Modify ( string id, int score )
         {
             return await repo.Modify ( new Guid ( id ), new Player { Score = score } );
         }
 
         [HttpDelete]
-        [Route ( "{id}" )]
+        [Route ( "{id:alpha}" )]
         public Task<Player> Delete ( string id )
         {
             return repo.Delete ( new Guid ( id ) );

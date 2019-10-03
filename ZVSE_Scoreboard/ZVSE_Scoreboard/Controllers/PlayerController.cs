@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -27,39 +28,40 @@ namespace ZVSE_Scoreboard.Controllers
             return View ( );
         }
 
-        [HttpPost ( "{name}" )]
+        [HttpPost ( "{name:alpha}" )]
         public Task<Player> AddNewPlayer ( string name )
         {
             return repo.AddNewPlayer ( new Player { Name = name } );
         }
 
-        [HttpGet ( "{id}" )]
+        [HttpGet ( "{id:alpha}" )]
         public Task<Player> GetPlayerById ( string id )
         {
             return repo.GetPlayerById ( new Guid(id) );
         }
 
-        [HttpGet ( "{rank}" )]
+        [HttpGet ( "{rank:int}" )]
         public Task<Player> GetPlayerByRank ( int rank )
         {
             return repo.GetPlayerByRank ( rank );
         }
 
-        [HttpGet ( "topscore/{take}" )]
+        [HttpGet ( "topscore/{take:int:min(1):max(20)}" )]
         public Task<Player[]> GetTopScore ( int take )
         {
             return repo.GetTopByScore ( take );
         }
 
-        [HttpGet ( "toplevel/{take}" )]
+        [HttpGet ( "toplevel/{take:int:min(1):max(20)}" )]
         public Task<Player [ ]> GetTopLevel ( int take )
         {
             return repo.GetTopByLevel ( take );
         }
 
-        [HttpGet ( "topsurvival/{take}" )]
+        [HttpGet ( "topsurvival/{take:int:min(1):max(20)}" )]
         public Task<Player [ ]> GetTopSurvival ( int take )
         {
+            
             return repo.GetTopBySurvival ( take );
         }
 
@@ -69,13 +71,13 @@ namespace ZVSE_Scoreboard.Controllers
             return repo.GetAllPlayers ( );
         }
 
-        [HttpPut ( "player" )]
+        [HttpPut ( "" )]
         public Task<Player> ModifyPlayer ( Player player )
         {          
             return repo.ModifyPlayer ( player.Id, player );
         }
 
-        [HttpDelete ( "{id}" )]
+        [HttpDelete ( "{id:alpha}" )]
         public Task<Player> DeletePlayer ( string id )
         {
             return repo.DeletePlayer ( new Guid ( id ) );

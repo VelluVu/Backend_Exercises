@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace GameWebApi.Controllers
 {
-    [Route ( "api/players/{playerId}/items" )]
+    [Route ( "api/players/{playerId:alpha}/items" )]
     [ApiController]
     public class ItemsController : Controller
     {
@@ -32,7 +32,7 @@ namespace GameWebApi.Controllers
         }
 
         [HttpGet]
-        [Route ( "{itemId}" )]
+        [Route ( "{itemId:alpha}" )]
         public Task<Item> GetItem ( string playerId, string itemId )
         {
 
@@ -47,7 +47,7 @@ namespace GameWebApi.Controllers
         }
 
         [HttpPost]
-        [Route ( "{newItem}" )]
+        [Route ( "" )]
         [ShowMessageException ( typeof ( NotFoundException ) )]
         public Task<Item> CreateItem ( string playerId, NewItem newItem )
         {
@@ -58,14 +58,14 @@ namespace GameWebApi.Controllers
         }
 
         [HttpPut]
-        [Route ( "{itemId}/{modifiedItem}" )]
+        [Route ( "{itemId:alpha}" )]
         public Task<Item> ModifyItem ( string playerId, string itemId, ModifiedItem modifiedItem )
         {
             return repo.ModifyItemAsync ( new Guid ( playerId ), new Guid ( itemId ), new Item ( ) {  Level = modifiedItem.Level } );
         }
 
         [HttpDelete]
-        [Route ( "{itemId}" )]
+        [Route ( "{itemId:alpha}" )]
         public Task<Item> DeleteItem ( string playerId, string itemId )
         {
             return repo.DeleteItemAsync ( new Guid ( playerId ), new Guid ( itemId ) );

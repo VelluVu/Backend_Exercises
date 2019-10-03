@@ -22,9 +22,7 @@ namespace ZVSE_Scoreboard.ErrorHandling
             }
             catch ( Exception e )
             {
-                context.Response.StatusCode = 404;
-                throw new NotFoundException ( "Stuff happened" );
-
+                throw new NotFoundException ( "Not Found ! ", context );
             }
         }
     }
