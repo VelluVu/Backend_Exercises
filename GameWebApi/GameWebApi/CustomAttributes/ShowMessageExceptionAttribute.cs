@@ -16,7 +16,7 @@ namespace GameWebApi.Controllers
 
         public override void OnException ( ExceptionContext context )
         {
-         
+
             if ( !( _type.IsAssignableFrom ( context.Exception.GetType ( ) ) ) )
             {
                 return;
@@ -28,4 +28,5 @@ namespace GameWebApi.Controllers
             context.Result = error;
 
         }
+    }
 }

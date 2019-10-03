@@ -94,7 +94,7 @@ namespace GameWebApi.Repositories
             return playerList.ToArray ( );
         }
 
-        public async Task<Player> Create ( NewPlayer newPlayer )
+        public async Task<Player> Create ( Player newPlayer )
         {
             Player player = new Player ( );
             player.Name = newPlayer.Name;
@@ -112,7 +112,7 @@ namespace GameWebApi.Repositories
         }
 
         //Modifies player and rewrites the text file
-        public async Task<Player> Modify ( Guid id, ModifiedPlayer player )
+        public async Task<Player> Modify ( Guid id, Player player )
         {
 
             Player [ ] players = await GetAll ( );
@@ -174,7 +174,7 @@ namespace GameWebApi.Repositories
             return player.itemList.First ( x => x.Id == itemId );
         }
 
-        public async Task<Item [ ]> GetAllItems ( Guid playerId )
+        public async Task<Item [ ]> GetAllItemsAsync ( Guid playerId )
         {
 
             Player player = await Get ( playerId );
@@ -183,7 +183,7 @@ namespace GameWebApi.Repositories
 
         }
 
-        public async Task<Item> CreateItem ( Guid playerId, NewItem newItem )
+        public async Task<Item> CreateItem ( Guid playerId, Item newItem )
         {
 
             Player player = await Get ( playerId );
@@ -195,7 +195,7 @@ namespace GameWebApi.Repositories
 
         }
 
-        public async Task<Item> ModifyItem ( Guid playerId, Guid itemId, ModifiedItem item )
+        public async Task<Item> ModifyItemAsync ( Guid playerId, Guid itemId, Item item )
         {
             Player player = await Get ( playerId );
 
@@ -207,7 +207,7 @@ namespace GameWebApi.Repositories
                     
         }
 
-        public async Task<Item> DeleteItem ( Guid playerId, Guid itemId )
+        public async Task<Item> DeleteItemAsync ( Guid playerId, Guid itemId )
         {
             Player player = await Get ( playerId );
 

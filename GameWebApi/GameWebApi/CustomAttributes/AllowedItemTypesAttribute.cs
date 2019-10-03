@@ -27,7 +27,7 @@ namespace GameWebApi.Items
 
         private string GetErrorMessage ( )
         {
-            return string.Format ( "Item type should be one of: %s",
+            return string.Format ( "Item type must be one of: %s",
                 string.Join ( ", ", _validItemTypes ) );
         }
     }

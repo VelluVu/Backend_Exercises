@@ -15,7 +15,7 @@ namespace GameWebApi.Items
 
             if ( date > currentTime )
             {
-                return new ValidationResult ( "Given date is from the future! this is not allowed." );
+                return new ValidationResult ( "Invalid datetime" );
             }
 
             return ValidationResult.Success;

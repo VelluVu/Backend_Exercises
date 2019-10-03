@@ -6,6 +6,7 @@ using GameWebApi.ErrorHandling;
 using GameWebApi.Players;
 using GameWebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,11 +16,12 @@ namespace GameWebApi.Controllers
     [ApiController]
     public class PlayersController : Controller
     {
-
+        private readonly ILogger<PlayersController> logger;
         private readonly IRepository repo;
 
-        public PlayersController ( IRepository repo )
+        public PlayersController ( ILogger<PlayersController> logger,IRepository repo )
         {
+            this.logger = logger;
             this.repo = repo;
         }
 
@@ -44,12 +46,13 @@ namespace GameWebApi.Controllers
         }
 
         [HttpPost]
-        [Route ( "{newPlayer}" )]
+        [Route ("")]
         [ShowMessageException ( typeof ( NotFoundException ) )]
-        public async Task<Player> Create ( string newPlayer )
+        public async Task<Player> Create ( NewPlayer newPlayer )
         {
-            NewPlayer nPlayer = new NewPlayer ( );
-            nPlayer.Name = newPlayer;
+            logger.LogInformation ( "Creating player with name " + newPlayer.Name );
+            Player nPlayer = new Player ( );
+            nPlayer.Name = newPlayer.Name;
             return await repo.Create ( nPlayer );
         }
 
@@ -57,7 +60,7 @@ namespace GameWebApi.Controllers
         [Route ( "{id}/{score}" )]
         public async Task<Player> Modify ( string id, int score )
         {
-            return await repo.Modify ( new Guid ( id ), new ModifiedPlayer { Score = score } );
+            return await repo.Modify ( new Guid ( id ), new Player { Score = score } );
         }
 
         [HttpDelete]
