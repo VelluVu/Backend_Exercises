@@ -217,5 +217,15 @@ namespace GameWebApi.Repositories
 
             return item;
         }
+
+        public Task<Player> GetByName ( string name )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task<Player [ ]> GetByScore ( int minScore )
+        {
+            throw new NotImplementedException ( );
+        }
     }
 }

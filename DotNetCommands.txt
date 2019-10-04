@@ -2,3 +2,11 @@ dotnet new <console> //make new console project <parameter>
 dotnet run <station_name> //runs the project with parameters 
 dotnet add package NewtonSoft.Json //adds new package to project
 dotnet restore command to resolve the dependency
+
+startup mongodb
+pathtomongodbinstallfolder.../mongod --dbpath pathtodatabasefolder/...
+
+second cmd
+pathtomongodbinstallfolder.../mongo
+
+show dbs

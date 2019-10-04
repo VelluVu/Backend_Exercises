@@ -28,7 +28,7 @@ namespace ZVSE_Scoreboard.Controllers
             return View ( );
         }
 
-        [HttpPost ( "{name:alpha}" )]
+        [HttpPost ( "name/{name:alpha}" )]
         public Task<Player> AddNewPlayer ( string name )
         {
             return repo.AddNewPlayer ( new Player { Name = name } );
@@ -71,10 +71,10 @@ namespace ZVSE_Scoreboard.Controllers
             return repo.GetAllPlayers ( );
         }
 
-        [HttpPut ( "" )]
-        public Task<Player> ModifyPlayer ( Player player )
+        [HttpPut ( "{id:alpha}" )]
+        public Task<Player> ModifyPlayer ( string id )
         {          
-            return repo.ModifyPlayer ( player.Id, player );
+            return repo.ModifyPlayer ( new Guid(id));
         }
 
         [HttpDelete ( "{id:alpha}" )]

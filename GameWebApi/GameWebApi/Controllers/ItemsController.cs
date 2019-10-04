@@ -46,22 +46,22 @@ namespace GameWebApi.Controllers
             return repo.GetAllItemsAsync ( new Guid ( playerId ) );
         }
 
+        //[ShowMessageException ( typeof ( NotFoundException ) )]
         [HttpPost]
-        [Route ( "" )]
-        [ShowMessageException ( typeof ( NotFoundException ) )]
-        public Task<Item> CreateItem ( string playerId, NewItem newItem )
+        [Route ( "{name:alpha}" )]     
+        public Task<Item> CreateItem ( string playerId, string name )
         {
-            logger.LogInformation ( "Creating item with name " + newItem.Name );
+            logger.LogInformation ( "Creating item with name " + name );
             Item item = new Item ( );
-            item.Name = newItem.Name;
+            item.Name = name;
             return repo.CreateItem ( new Guid ( playerId ), item );
         }
 
         [HttpPut]
-        [Route ( "{itemId:alpha}" )]
-        public Task<Item> ModifyItem ( string playerId, string itemId, ModifiedItem modifiedItem )
+        [Route ( "{itemId:alpha}/{level:int}" )]
+        public Task<Item> ModifyItem ( string playerId, string itemId, int level )
         {
-            return repo.ModifyItemAsync ( new Guid ( playerId ), new Guid ( itemId ), new Item ( ) {  Level = modifiedItem.Level } );
+            return repo.ModifyItemAsync ( new Guid ( playerId ), new Guid ( itemId ), new Item ( ) {  Level = level } );
         }
 
         [HttpDelete]

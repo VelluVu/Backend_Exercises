@@ -75,8 +75,9 @@ namespace ZVSE_Scoreboard.Repositories
             return players.OrderByDescending ( p => p.Level ).Take ( take ).ToArray ( );
         }
 
-        public async Task<Player> ModifyPlayer ( Guid id, Player player )
+        public async Task<Player> ModifyPlayer ( Guid id )
         {
+            Player player = new Player ( );
             FilterDefinition<Player> filter = Builders<Player>.Filter.Eq ( p => p.Id, id );
             UpdateDefinition<Player> update = Builders<Player>.Update.Set ( p => p.Score, player.Score );
             UpdateDefinition<Player> update1 = Builders<Player>.Update.Set ( p => p.Level, player.Level );

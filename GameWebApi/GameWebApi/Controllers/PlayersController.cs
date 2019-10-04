@@ -38,6 +38,12 @@ namespace GameWebApi.Controllers
             return repo.Get ( new Guid ( id ) );
         }
 
+        [HttpGet ("name/{name:alpha}")] 
+        public Task<Player> GetByName(string name)
+        {
+            return repo.GetByName ( name );
+        }
+
         [HttpGet]
         [Route ( "" )]
         public Task<Player [ ]> GetAll ( )
@@ -45,14 +51,20 @@ namespace GameWebApi.Controllers
             return repo.GetAll ( );
         }
 
-        [HttpPost]
-        [Route ("")]
-        [ShowMessageException ( typeof ( NotFoundException ) )]
-        public async Task<Player> Create ( NewPlayer newPlayer )
+        [HttpGet( "{minScore:int:min(1)}" )]
+        public Task<Player[]> GetByScore(int minScore )
         {
-            logger.LogInformation ( "Creating player with name " + newPlayer.Name );
+            return repo.GetByScore ( minScore );
+        }
+
+        //[ShowMessageException ( typeof ( NotFoundException ) )]
+        [HttpPost]
+        [Route ( "{name:alpha}" )]
+        public async Task<Player> Create ( string name )
+        {
+            logger.LogInformation ( "Creating player with name " + name );
             Player nPlayer = new Player ( );
-            nPlayer.Name = newPlayer.Name;
+            nPlayer.Name = name;
             return await repo.Create ( nPlayer );
         }
 

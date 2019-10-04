@@ -19,7 +19,7 @@ namespace GameWebApi.Repositories
         public MongoDbRepository ( )
         {
             var mongoClient = new MongoClient ( "mongodb://localhost:27017" );
-            var database = mongoClient.GetDatabase ( "Game" );
+            var database = mongoClient.GetDatabase ( "game" );
             this.collection = database.GetCollection<Player> ( "players" );
             this.bsonDocumentCollection = database.GetCollection<BsonDocument> ( "players" );
         }
@@ -53,9 +53,25 @@ namespace GameWebApi.Repositories
             return collection.Find ( filter ).FirstAsync ( );
         }
 
+        public Task<Player> GetByName( string name)
+        {
+            var filter = Builders<Player>.Filter.Eq ( p => p.Name, name );
+            return collection.Find ( filter ).FirstAsync ( );
+        }
+
         public async Task<Player [ ]> GetAll ( )
         {
             var players = await collection.Find ( new BsonDocument ( ) ).ToListAsync ( );
+            return players.ToArray ( );
+        }
+
+        public async Task<Player[]> GetByScore ( int min )
+        {
+            //var players = await collection.Find ( new BsonDocument ( ) ).ToListAsync ( );
+            //players.OrderByDescending ( p => p.Score > min );
+
+            FilterDefinition<Player> filter = Builders<Player>.Filter.Gte ( p => p.Score, min );
+            var players = await collection.Find ( filter ).ToListAsync ( );
             return players.ToArray ( );
         }
         #endregion

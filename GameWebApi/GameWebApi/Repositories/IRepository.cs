@@ -10,6 +10,8 @@ namespace GameWebApi.Repositories
     public interface IRepository
     {
         Task<Player> Get ( Guid playerId );
+        Task<Player> GetByName ( string name );
+        Task<Player [ ]> GetByScore ( int minScore );
         Task<Player [ ]> GetAll ( );
         Task<Player> Create ( Player player );
         Task<Player> Modify ( Guid playerId, Player player );
@@ -20,5 +22,6 @@ namespace GameWebApi.Repositories
         Task<Item> CreateItem ( Guid playerId, Item itemId );
         Task<Item> ModifyItemAsync ( Guid playerId, Guid itemId, Item item );
         Task<Item> DeleteItemAsync ( Guid playerId, Guid itemId );
+       
     }
 }

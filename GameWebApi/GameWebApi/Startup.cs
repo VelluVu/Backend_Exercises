@@ -35,8 +35,12 @@ namespace GameWebApi
             if ( env.IsDevelopment ( ) )
             {
                 app.UseDeveloperExceptionPage ( );
+#pragma warning disable CS0618 // Type or member is obsolete
                 loggerFactory.AddConsole ( Configuration.GetSection ( "Logging" ) );
+#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
                 loggerFactory.AddDebug ( );
+#pragma warning restore CS0618 // Type or member is obsolete
             }
 
             app.UseMvc ( );
