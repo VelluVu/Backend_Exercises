@@ -51,6 +51,19 @@ namespace GameWebApi.Controllers
             return repo.GetAll ( );
         }
 
+        [HttpGet]
+        [Route ( "tag/{tag}" )]
+        public Task<Player [ ]> GetAllWithTag ( TagType tag )
+        {
+            Type enumType = tag.GetType ( );
+            bool isEnumValid = Enum.IsDefined ( enumType, tag );
+            if ( !isEnumValid )
+            {
+                throw new Exception ( "Not Valid Enum" );
+            }
+            return repo.GetPlayersWithTag ( tag );
+        }
+
         [HttpGet( "{minScore:int:min(1)}" )]
         public Task<Player[]> GetByScore(int minScore )
         {

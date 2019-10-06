@@ -12,6 +12,7 @@ namespace GameWebApi.Repositories
         Task<Player> Get ( Guid playerId );
         Task<Player> GetByName ( string name );
         Task<Player [ ]> GetByScore ( int minScore );
+        Task<Player [ ]> GetPlayersWithTag ( TagType tag );
         Task<Player [ ]> GetAll ( );
         Task<Player> Create ( Player player );
         Task<Player> Modify ( Guid playerId, Player player );

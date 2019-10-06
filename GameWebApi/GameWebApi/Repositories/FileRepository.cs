@@ -227,5 +227,10 @@ namespace GameWebApi.Repositories
         {
             throw new NotImplementedException ( );
         }
+
+        public Task<Player [ ]> GetPlayersWithTag ( TagType tag )
+        {
+            throw new NotImplementedException ( );
+        }
     }
 }

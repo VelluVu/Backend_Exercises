@@ -60,8 +60,15 @@ namespace GameWebApi.Repositories
         }
 
         public async Task<Player [ ]> GetAll ( )
+        {   
+            var players = await collection.Find ( new BsonDocument ( ) ).ToListAsync ( );        
+            return players.ToArray ( );
+        }
+
+        public async Task<Player[]> GetPlayersWithTag(TagType tag)
         {
-            var players = await collection.Find ( new BsonDocument ( ) ).ToListAsync ( );
+            FilterDefinition<Player> filter = Builders<Player>.Filter.Eq ( p => p.tag, tag );
+            var players = await collection.Find ( filter ).ToListAsync ( );
             return players.ToArray ( );
         }
 
@@ -74,6 +81,11 @@ namespace GameWebApi.Repositories
             var players = await collection.Find ( filter ).ToListAsync ( );
             return players.ToArray ( );
         }
+
+        //public async Task<Player[]> GetPlayersWithItemProperty()
+        //{
+
+        //}
         #endregion
 
         #region ItemDBQueries
@@ -135,6 +147,7 @@ namespace GameWebApi.Repositories
             throw new ErrorHandling.NotFoundException("Item was not found");
 
         }
+       
         #endregion
     }
 }
