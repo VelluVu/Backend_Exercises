@@ -75,19 +75,17 @@ namespace ZVSE_Scoreboard.Repositories
             return players.OrderByDescending ( p => p.Level ).Take ( take ).ToArray ( );
         }
 
-        public async Task<Player> ModifyPlayer ( Guid id )
-        {
-            Player player = new Player ( );
+        public async Task<Player> ModifyPlayer ( Guid id, ModifiedPlayer player )
+        {       
             FilterDefinition<Player> filter = Builders<Player>.Filter.Eq ( p => p.Id, id );
-            UpdateDefinition<Player> update = Builders<Player>.Update.Set ( p => p.Score, player.Score );
-            UpdateDefinition<Player> update1 = Builders<Player>.Update.Set ( p => p.Level, player.Level );
-            UpdateDefinition<Player> update2 = Builders<Player>.Update.Set ( p => p.Name, player.Name );
-            UpdateDefinition<Player> update3 = Builders<Player>.Update.Set ( p => p.SurvivalTime, player.SurvivalTime );      
 
+            UpdateDefinition<Player> update = Builders<Player>.Update
+                .Set ( p => p.Score, player.Score )
+                .Set ( p => p.Level, player.Level )
+                .Set ( p => p.SurvivalTime, player.SurvivalTime );
+            
             UpdateResult result = await collection.UpdateOneAsync ( filter, update );
-            UpdateResult result1 = await collection.UpdateOneAsync ( filter, update1 );
-            UpdateResult result2 = await collection.UpdateOneAsync ( filter, update2 );
-            UpdateResult result3 = await collection.UpdateOneAsync ( filter, update3 );
+           
             //return collection.AsQueryable ( ).First ( p => p.Id == id );
             return await collection.Find ( filter ).FirstAsync ( );
         }

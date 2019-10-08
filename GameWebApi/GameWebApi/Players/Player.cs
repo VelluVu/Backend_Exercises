@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GameWebApi.Items;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace GameWebApi.Players
@@ -8,6 +9,7 @@ namespace GameWebApi.Players
     public class Player
     {
         [BsonId]
+        [BsonRepresentation ( BsonType.ObjectId )]
         public Guid Id { get; set; }
         public string Name { get; set; }
         public int Score { get; set; }

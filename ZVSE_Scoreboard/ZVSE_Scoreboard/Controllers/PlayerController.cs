@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ZVSE_Scoreboard.CustomAttributes;
 using ZVSE_Scoreboard.Players;
 using ZVSE_Scoreboard.Repositories;
 
@@ -28,10 +29,16 @@ namespace ZVSE_Scoreboard.Controllers
             return View ( );
         }
 
-        [HttpPost ( "name/{name:alpha}" )]
-        public Task<Player> AddNewPlayer ( string name )
+        [HttpPost ( "" )]
+        [ValidateModel]
+        public Task<Player> AddNewPlayer ( [FromBody] NewPlayer newPlayer )
         {
-            return repo.AddNewPlayer ( new Player { Name = name } );
+            Player player = new Player ( )
+            {
+                Name = newPlayer.Name
+            };
+
+            return repo.AddNewPlayer ( player );
         }
 
         [HttpGet ( "{id:alpha}" )]
@@ -72,9 +79,10 @@ namespace ZVSE_Scoreboard.Controllers
         }
 
         [HttpPut ( "{id:alpha}" )]
-        public Task<Player> ModifyPlayer ( string id )
-        {          
-            return repo.ModifyPlayer ( new Guid(id));
+        public Task<Player> ModifyPlayer ( string id, [FromBody] ModifiedPlayer player )
+        {
+          
+            return repo.ModifyPlayer ( new Guid(id), player );
         }
 
         [HttpDelete ( "{id:alpha}" )]

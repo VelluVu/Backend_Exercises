@@ -11,7 +11,7 @@ namespace ZVSE_Scoreboard.Repositories
         Task<Player> AddNewPlayer ( Player player );
         Task<Player> GetPlayerById ( Guid id );
         Task<Player> GetPlayerByRank ( int rank );   
-        Task<Player> ModifyPlayer ( Guid id, Player player );
+        Task<Player> ModifyPlayer ( Guid id, ModifiedPlayer player );
         Task<Player> DeletePlayer ( Guid id );
 
         Task<Player [ ]> GetAllPlayers ( );

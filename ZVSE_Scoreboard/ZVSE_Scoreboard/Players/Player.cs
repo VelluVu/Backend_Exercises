@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +9,8 @@ namespace ZVSE_Scoreboard.Players
 {
     public class Player
     {
+        [BsonId]
+        [BsonRepresentation ( BsonType.ObjectId )]
         public Guid Id { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }

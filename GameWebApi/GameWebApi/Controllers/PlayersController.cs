@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameWebApi.CustomAttributes;
 using GameWebApi.ErrorHandling;
 using GameWebApi.Players;
 using GameWebApi.Repositories;
@@ -70,22 +71,52 @@ namespace GameWebApi.Controllers
             return repo.GetByScore ( minScore );
         }
 
+        [HttpGet("topscore/")]
+        public Task<Player [ ]> GetTop10Score ( )
+        {
+            //var players = await collection.Find ( new BsonDocument ( ) ).ToListAsync ( );
+            //players.OrderByDescending ( p => p.Score > min );
+
+            return repo.GetTop10Score ( );
+        }
+
+        [HttpGet ( "score/avg/{start}/{end}"]
+        public Task<int> AverageScoreBetweenDates ( DateTime start, DateTime end )
+        {
+            return repo.AverageScoreBetweenDates ( start, end );       
+        }
+
         //[ShowMessageException ( typeof ( NotFoundException ) )]
         [HttpPost]
-        [Route ( "{name:alpha}" )]
-        public async Task<Player> Create ( string name )
+        [Route ( "" )]
+        [ValidateModel]
+        public async Task<Player> Create ( [FromBody] NewPlayer newPlayer )
         {
-            logger.LogInformation ( "Creating player with name " + name );
+            logger.LogInformation ( "Creating player with name " + newPlayer.Name );
             Player nPlayer = new Player ( );
-            nPlayer.Name = name;
+            nPlayer.Name = newPlayer.Name;
             return await repo.Create ( nPlayer );
         }
 
         [HttpPut]
-        [Route ( "{id:alpha}/{score:int}" )]
-        public async Task<Player> Modify ( string id, int score )
+        [Route ( "{id:alpha}" )]
+        public Task<Player> Modify ( string id, [FromBody] ModifiedPlayer score )
         {
-            return await repo.Modify ( new Guid ( id ), new Player { Score = score } );
+            return repo.Modify ( new Guid ( id ), score);
+        }
+
+        [HttpPut]
+        [Route ( "{id:alpha}/score" )]
+        public Task IncrementScore ( string id, [FromBody] AddScore addScore )
+        {
+            return repo.IncrementScore ( new Guid ( id ), addScore );
+        }
+
+        [HttpPut]
+        [Route ( "{id:alpha}/name" )]
+        public Task ChangeName ( string id, UpdateName updateName )
+        {
+            return repo.ChangeName ( new Guid(id), updateName );
         }
 
         [HttpDelete]

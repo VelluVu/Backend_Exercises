@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace GameWebApi.Repositories
+namespace GameWebApi.Repositories //Stopped updating this class since mongodb, just implementing interface for no errors dublicating some code.
 {
     public class FileRepository : IRepository
     {
@@ -229,6 +229,41 @@ namespace GameWebApi.Repositories
         }
 
         public Task<Player [ ]> GetPlayersWithTag ( TagType tag )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task IncrementScore ( Guid id, int add )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task ChangeName ( Guid id, string name )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task<Player [ ]> GetTop10Score ( )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task<int> AverageScoreBetweenDates ( DateTime start, DateTime end )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task<Player> Modify ( Guid playerId, ModifiedPlayer player )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task IncrementScore ( Guid id, AddScore add )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task ChangeName ( Guid id, UpdateName name )
         {
             throw new NotImplementedException ( );
         }
