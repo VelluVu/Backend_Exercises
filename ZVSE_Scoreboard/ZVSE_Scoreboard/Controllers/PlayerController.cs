@@ -11,7 +11,7 @@ using ZVSE_Scoreboard.Repositories;
 
 namespace ZVSE_Scoreboard.Controllers
 {
-    [Route ( "api/players" )]
+    [Route ( "api/[controller]")]
     [ApiController]
     public class PlayerController : Controller
     {
@@ -33,6 +33,7 @@ namespace ZVSE_Scoreboard.Controllers
         [ValidateModel]
         public Task<Player> AddNewPlayer ( [FromBody] NewPlayer newPlayer )
         {
+            logger.LogInformation ( "Creating player with name " + newPlayer.Name );
             Player player = new Player ( )
             {
                 Name = newPlayer.Name
@@ -41,13 +42,13 @@ namespace ZVSE_Scoreboard.Controllers
             return repo.AddNewPlayer ( player );
         }
 
-        [HttpGet ( "{id:alpha}" )]
-        public Task<Player> GetPlayerById ( string id )
+        [HttpGet ( "{id}" )]
+        public Task<Player> GetPlayerById ( Guid id )
         {
-            return repo.GetPlayerById ( new Guid(id) );
+            return repo.GetPlayerById (id);
         }
 
-        [HttpGet ( "{rank:int}" )]
+        [HttpGet ( "rank/{rank:int}" )]
         public Task<Player> GetPlayerByRank ( int rank )
         {
             return repo.GetPlayerByRank ( rank );
@@ -78,17 +79,17 @@ namespace ZVSE_Scoreboard.Controllers
             return repo.GetAllPlayers ( );
         }
 
-        [HttpPut ( "{id:alpha}" )]
-        public Task<Player> ModifyPlayer ( string id, [FromBody] ModifiedPlayer player )
+        [HttpPut ( "{id}" )]
+        public Task<Player> ModifyPlayer ( Guid id, [FromBody] ModifiedPlayer player )
         {
           
-            return repo.ModifyPlayer ( new Guid(id), player );
+            return repo.ModifyPlayer ( id, player );
         }
 
-        [HttpDelete ( "{id:alpha}" )]
-        public Task<Player> DeletePlayer ( string id )
+        [HttpDelete ( "{id}" )]
+        public Task<Player> DeletePlayer ( Guid id )
         {
-            return repo.DeletePlayer ( new Guid ( id ) );
+            return repo.DeletePlayer (id);
         }
     }
 }

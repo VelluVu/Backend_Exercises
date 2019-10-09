@@ -110,31 +110,31 @@ namespace GameWebApi.Controllers
         }
 
         [HttpPut]
-        [Route ( "{id:alpha}" )]
-        public Task<Player> Modify ( string id, [FromBody] ModifiedPlayer score )
+        [Route ( "{id}" )]
+        public Task<Player> Modify ( Guid id, [FromBody] ModifiedPlayer score )
         {
-            return repo.Modify ( new Guid ( id ), score);
+            return repo.Modify ( id, score);
         }
 
         [HttpPut]
-        [Route ( "{id:alpha}/score" )]
-        public Task IncrementScore ( string id, [FromBody] AddScore addScore )
+        [Route ( "{id}/score" )]
+        public Task IncrementScore ( Guid id, [FromBody] AddScore addScore )
         {
-            return repo.IncrementScore ( new Guid ( id ), addScore );
+            return repo.IncrementScore ( id , addScore );
         }
 
         [HttpPut]
-        [Route ( "{id:alpha}/name" )]
-        public Task ChangeName ( string id, UpdateName updateName )
+        [Route ( "{id}/name" )]
+        public Task ChangeName ( Guid id, UpdateName updateName )
         {
-            return repo.ChangeName ( new Guid(id), updateName );
+            return repo.ChangeName ( id, updateName );
         }
 
         [HttpDelete]
-        [Route ( "{id:alpha}" )]
-        public Task<Player> Delete ( string id )
+        [Route ( "{id}" )]
+        public Task<Player> Delete ( Guid id )
         {
-            return repo.Delete ( new Guid ( id ) );
+            return repo.Delete ( id );
         }
     }
 }

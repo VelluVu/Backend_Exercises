@@ -18,9 +18,13 @@ namespace ZVSE_Scoreboard.Repositories
         public MongoDb ( )
         {
             var mongoClient = new MongoClient ( "mongodb://localhost:27017" );
-            var database = mongoClient.GetDatabase ( "Game" );
+            var database = mongoClient.GetDatabase ( "ZvseScoreBoard" );
             this.collection = database.GetCollection<Player> ( "players" );
-            this.bsonDocumentCollection = database.GetCollection<BsonDocument> ( "players" );
+            var collectionSettings = new MongoCollectionSettings
+            {
+                GuidRepresentation = GuidRepresentation.Standard
+            };
+            this.bsonDocumentCollection = database.GetCollection<BsonDocument> ( "players", collectionSettings );
         }
         #endregion
 

@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace GameWebApi.Controllers
 {
-    [Route ( "api/players/{playerId:alpha}/items" )]
+    [Route ( "api/players/{playerId}/items" )]
     [ApiController]
     public class ItemsController : Controller
     {
@@ -32,29 +32,29 @@ namespace GameWebApi.Controllers
         }
 
         [HttpGet]
-        [Route ( "{itemId:alpha}" )]
-        public Task<Item> GetItem ( string playerId, string itemId )
+        [Route ( "{itemId}" )]
+        public Task<Item> GetItem ( Guid playerId, Guid itemId )
         {
 
-            return repo.GetItem ( new Guid ( playerId ), new Guid ( itemId ) );
+            return repo.GetItem ( playerId , itemId );
         }
 
         [HttpGet]
         [Route ( "" )]
-        public Task<Item [ ]> GetAllItems ( string playerId )
+        public Task<Item [ ]> GetAllItems ( Guid playerId )
         {
-            return repo.GetAllItemsAsync ( new Guid ( playerId ) );
+            return repo.GetAllItemsAsync ( playerId );
         }
 
         //[ShowMessageException ( typeof ( NotFoundException ) )]
         [HttpPost]
-        [Route ( "{name:alpha}" )]     
-        public Task<Item> CreateItem ( string playerId, string name )
+        [Route ( "{name}" )]     
+        public Task<Item> CreateItem ( Guid playerId, NewItem newItem )
         {
-            logger.LogInformation ( "Creating item with name " + name );
+            logger.LogInformation ( "Creating item with name " + newItem.Name );
             Item item = new Item ( );
-            item.Name = name;
-            return repo.CreateItem ( new Guid ( playerId ), item );
+            item.Name = newItem.Name;
+            return repo.CreateItem (playerId, item );
         }
 
         [HttpPut ( "/api/players/{playerId}/items/AddItemToPlayer/" )]
@@ -66,17 +66,17 @@ namespace GameWebApi.Controllers
         }
 
         [HttpPut]
-        [Route ( "{itemId:alpha}/{level:int}" )]
-        public Task<Item> ModifyItem ( string playerId, string itemId, int level )
+        [Route ( "{itemId}/{level:int}" )]
+        public Task<Item> ModifyItem ( Guid playerId, Guid itemId, int level )
         {
-            return repo.ModifyItemAsync ( new Guid ( playerId ), new Guid ( itemId ), new Item ( ) {  Level = level } );
+            return repo.ModifyItemAsync ( playerId, itemId , new Item ( ) {  Level = level } );
         }
 
         [HttpDelete]
         [Route ( "{itemId:alpha}" )]
-        public Task<Item> DeleteItem ( string playerId, string itemId )
+        public Task<Item> DeleteItem ( Guid playerId, Guid itemId )
         {
-            return repo.DeleteItemAsync ( new Guid ( playerId ), new Guid ( itemId ) );
+            return repo.DeleteItemAsync ( playerId, itemId );
         }
 
         [HttpDelete ( "/api/players/{playerId}/items/sell/{itemId}" )]
