@@ -57,6 +57,14 @@ namespace GameWebApi.Controllers
             return repo.CreateItem ( new Guid ( playerId ), item );
         }
 
+        [HttpPut ( "/api/players/{playerId}/items/AddItemToPlayer/" )]
+        public async Task<Item> AddItemToPlayer ( Guid playerId, Item item )
+        {
+            item.Id = Guid.NewGuid ( );
+            item.CreationTime = DateTime.UtcNow;
+            return await repo.AddItemToPlayer( playerId, item );
+        }
+
         [HttpPut]
         [Route ( "{itemId:alpha}/{level:int}" )]
         public Task<Item> ModifyItem ( string playerId, string itemId, int level )
@@ -69,6 +77,12 @@ namespace GameWebApi.Controllers
         public Task<Item> DeleteItem ( string playerId, string itemId )
         {
             return repo.DeleteItemAsync ( new Guid ( playerId ), new Guid ( itemId ) );
+        }
+
+        [HttpDelete ( "/api/players/{playerId}/items/sell/{itemId}" )]
+        public async Task<Player> SellItem ( Guid playerId, Guid itemId )
+        {
+            return await repo.SellItem ( playerId, itemId );
         }
     }
 }

@@ -20,7 +20,7 @@ namespace GameWebApi.Controllers
         private readonly ILogger<PlayersController> logger;
         private readonly IRepository repo;
 
-        public PlayersController ( ILogger<PlayersController> logger,IRepository repo )
+        public PlayersController ( ILogger<PlayersController> logger, IRepository repo )
         {
             this.logger = logger;
             this.repo = repo;
@@ -80,10 +80,22 @@ namespace GameWebApi.Controllers
             return repo.GetTop10Score ( );
         }
 
-        [HttpGet ( "score/avg/{start}/{end}"]
+        [HttpGet ( "score/avg/{start}/{end}")]
         public Task<int> AverageScoreBetweenDates ( DateTime start, DateTime end )
         {
             return repo.AverageScoreBetweenDates ( start, end );       
+        }
+
+        [HttpGet ( "/api/players/withitem/{type}" )]
+        public async Task<Player [ ]> GetPlayersWithItems ( Items.ItemType type )
+        {
+            return await repo.GetPlayersWithItemType ( type );
+        }
+
+        [HttpGet ( "/api/players/withitemamount/{amount}" )]
+        public async Task<Player [ ]> GetPlayersWithItemAmount ( int amount )
+        {
+            return await repo.GetPlayersWithAmountOfItems ( amount );
         }
 
         //[ShowMessageException ( typeof ( NotFoundException ) )]

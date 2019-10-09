@@ -16,6 +16,8 @@ namespace GameWebApi.Repositories
         Task<Player [ ]> GetPlayersWithTag ( TagType tag );
         Task<Player [ ]> GetAll ( );
         Task<Player [ ]> GetTop10Score ( );
+        Task<Player [ ]> GetPlayersWithAmountOfItems ( int amount );
+        Task<Player [ ]> GetPlayersWithItemType ( ItemType type );
         Task<Player> Create ( Player player );
         Task<Player> Modify ( Guid playerId, ModifiedPlayer player );
         Task IncrementScore ( Guid id, AddScore add );
@@ -25,8 +27,11 @@ namespace GameWebApi.Repositories
         Task<Item> GetItem ( Guid playerId, Guid itemId );
         Task<Item [ ]> GetAllItemsAsync ( Guid playerId );
         Task<Item> CreateItem ( Guid playerId, Item itemId );
+        Task<Item> AddItemToPlayer ( Guid playerId, Item item );
         Task<Item> ModifyItemAsync ( Guid playerId, Guid itemId, Item item );
         Task<Item> DeleteItemAsync ( Guid playerId, Guid itemId );
-        
+        Task<Player> SellItem ( Guid playerId, Guid itemId );
+
+
     }
 }

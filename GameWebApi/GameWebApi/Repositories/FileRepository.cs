@@ -171,7 +171,7 @@ namespace GameWebApi.Repositories //Stopped updating this class since mongodb, j
         {
             Player player = await Get ( playerId );
 
-            return player.itemList.First ( x => x.Id == itemId );
+            return player.Items.First ( x => x.Id == itemId );
         }
 
         public async Task<Item [ ]> GetAllItemsAsync ( Guid playerId )
@@ -179,7 +179,7 @@ namespace GameWebApi.Repositories //Stopped updating this class since mongodb, j
 
             Player player = await Get ( playerId );
             
-            return player.itemList.ToArray ( );
+            return player.Items.ToArray ( );
 
         }
 
@@ -189,7 +189,7 @@ namespace GameWebApi.Repositories //Stopped updating this class since mongodb, j
             Player player = await Get ( playerId );
             Item item = new Item ( );
             item.Name = newItem.Name;
-            player.itemList.Add ( item );
+            player.Items.Add ( item );
 
             return item;
 
@@ -199,7 +199,7 @@ namespace GameWebApi.Repositories //Stopped updating this class since mongodb, j
         {
             Player player = await Get ( playerId );
 
-            var query = from x in player.itemList
+            var query = from x in player.Items
                         where x.Id == itemId         
                         select x.Level = item.Level;
 
@@ -211,9 +211,9 @@ namespace GameWebApi.Repositories //Stopped updating this class since mongodb, j
         {
             Player player = await Get ( playerId );
 
-            Item item = player.itemList.First ( x => x.Id == itemId );
+            Item item = player.Items.First ( x => x.Id == itemId );
 
-            player.itemList.Remove ( player.itemList.First ( x => x.Id == itemId ) );
+            player.Items.Remove ( player.Items.First ( x => x.Id == itemId ) );
 
             return item;
         }
@@ -264,6 +264,26 @@ namespace GameWebApi.Repositories //Stopped updating this class since mongodb, j
         }
 
         public Task ChangeName ( Guid id, UpdateName name )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task<Player [ ]> GetPlayersWithAmountOfItems ( int amount )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task<Player [ ]> GetPlayersWithItemType ( ItemType type )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task<Player> SellItem ( Guid playerId, Guid itemId )
+        {
+            throw new NotImplementedException ( );
+        }
+
+        public Task<Item> AddItemToPlayer ( Guid playerId, Item item )
         {
             throw new NotImplementedException ( );
         }

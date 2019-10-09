@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.IdGenerators;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,8 +11,9 @@ namespace GameWebApi.Items
 {
     public class Item
     {
-        [BsonId]
-        [BsonRepresentation ( BsonType.ObjectId )]
+        [BsonId ( IdGenerator = typeof ( GuidGenerator ) )]
+        [BsonRepresentation ( BsonType.String )]
+        [BsonIgnoreIfDefault]
         public Guid Id { get; set; }
         [StringLength ( 128 )]
         public string Name { get; set; }
@@ -22,6 +24,7 @@ namespace GameWebApi.Items
         [DateFromPast]
         [DataType ( DataType.Date )]
         public DateTime CreationTime { get; set; }
+        public object Value { get; internal set; }
 
         public Item ( )
         {
