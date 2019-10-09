@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace GameWebApi.Controllers
 {
-    [Route ( "api/players" )]
+    [Route ( "api/[controller]" )]
     [ApiController]
     public class PlayersController : Controller
     {
@@ -33,10 +33,10 @@ namespace GameWebApi.Controllers
         }
 
         [HttpGet]
-        [Route ( "{id:alpha}" )]
-        public Task<Player> Get ( string id )
+        [Route ( "{id}" )]
+        public Task<Player> Get ( Guid id )
         {
-            return repo.Get ( new Guid ( id ) );
+            return repo.Get (id);
         }
 
         [HttpGet ("name/{name:alpha}")] 
@@ -99,8 +99,7 @@ namespace GameWebApi.Controllers
         }
 
         //[ShowMessageException ( typeof ( NotFoundException ) )]
-        [HttpPost]
-        [Route ( "" )]
+        [HttpPost ("")]
         [ValidateModel]
         public async Task<Player> Create ( [FromBody] NewPlayer newPlayer )
         {
